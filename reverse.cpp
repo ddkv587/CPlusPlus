@@ -45,14 +45,61 @@ void reverse( struct node* head )
 	}
 }
 
+void reverse( struct node*& pHead, struct node*& pTail )
+{
+	if ( !pHead || !pTail || pHead == pTail ) return;
+
+	node head;
+	head.next = pHead;
+
+	node* pHolder = NULL;
+	if ( pTail ) {
+		pHolder = pTail->next;
+		pTail->next = NULL;
+	}
+
+	reverse( &head );
+
+	pHead = head.next;
+	pTail = head.next;
+	while ( pTail->next )
+	{
+		pTail = pTail->next;
+	}
+	pTail->next = pHolder;
+}
+
+void reverseK( struct node*& head, int k )
+{
+	if ( !head || k == 0 ) return;
+
+	int count;
+	node* pTail = head;
+	for ( count = 1; count < k; ++count ) {
+		if ( !pTail->next ) break;
+
+		pTail = pTail->next;
+	}
+		
+	reverse( head, pTail );
+
+	if ( count == k ) {
+		reverseK( pTail->next, k );
+	}
+}
+
 int main(int argc, const char *argv[])
 {
 	node head;
+	node head2;
 	create( &head, 10 );
-	print( &head );
+	create( &head2, 20 );
 
 	reverse( &head );
+	reverseK( head2.next, 3 );
+
 	print( &head );
+	print( &head2 );
 
 	return 0;
 }
